@@ -77,26 +77,6 @@ class Texture(object):
                 self.pixels[y].append(color(r, g, b))
         image.close()
 
-    def paint(self):
-        image = open(self.path, "rb")
-        # we ignore all the header stuff
-        image.seek(2 + 4 + 4)  # skip BM, skip bmp size, skip zeros
-        header_size = struct.unpack("=l", image.read(4))[0]  # read header size
-        image.seek(2 + 4 + 4 + 4 + 4)
-
-        self.width = struct.unpack("=l", image.read(4))[0]  # read width
-        self.height = struct.unpack("=l", image.read(4))[0]  # read width
-        self.pixels = []
-        image.seek(header_size)
-        for y in range(self.height):
-            self.pixels.append([])
-            for x in range(self.width):
-                b = ord(image.read(1))
-                g = ord(image.read(1))
-                r = ord(image.read(1))
-                self.pixels[y].append([x, y, color(r, g, b)])
-        image.close()
-
     def get_color(self, tx, ty, intensity=1):
         x = int(tx * self.width)
         y = int(ty * self.height)
